@@ -2,7 +2,18 @@ require 'http'
 
 puts "Should have 401 if I request api/posts"
 r = Http.get("http://127.0.0.1:3000/api/posts.json")
-if r.status_code != 401
+
+def safe_status_code(response)
+
+  if response.respond_to? :status_code
+    response.status_code
+  else
+    response.status
+  end
+end
+
+
+if safe_status_code(r) != 401
   fail "This should have been a 401"
 end
 
